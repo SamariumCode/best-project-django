@@ -1,4 +1,7 @@
 from django.contrib import admin
+from dbbackup.management.commands.dbbackup import Command as DbBackupCommand
+from django.utils.translation import gettext_lazy as _
+from django.shortcuts import render
 
 from .models import CustomUser
 
@@ -9,9 +12,9 @@ class CustomUserAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('phone_number', 'email', 'full_name', 'password')
+            'fields': ('phone_number', 'email', 'full_name')
         }),
-        ('Permissions', {
+        (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser')
         }),
     )

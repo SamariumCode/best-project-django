@@ -1,0 +1,144 @@
+version: '3.9'
+
+services:
+  # Django Application Service
+  webshop-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webshop-django
+    command: >
+      sh -c "python manage.py migrate &&
+        python manage.py collectstatic --no-input --clear &&
+        gunicorn --bind 0.0.0.0:8000 config.wsgi:application"
+    volumes:
+      - .:/usr/src/app
+      - static:/usr/src/app/static
+      - media:/usr/src/app/media
+    env_file:
+      - .env
+    expose:
+      - "8000"
+    depends_on:
+      - webshop-db
+      - webshop-redis
+    restart: always
+    networks:
+      - webshop-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # PostgreSQL Database Service
+  webshop-db:
+    image: postgres:13
+    container_name: webshop-postgres
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - webshop-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Redis Service for Celery
+  webshop-redis:
+    image: redis:6.2
+    container_name: webshop-redis
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - webshop-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Celery Worker Service
+  webshop-celery-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webshop-celery-worker
+    command: celery -A config worker -l info
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+    depends_on:
+      - webshop-app
+      - webshop-redis
+    restart: always
+    networks:
+      - webshop-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://webshop-app:8000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Celery Beat Service for Scheduled Tasks
+  webshop-celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webshop-celery-beat
+    command: celery -A config beat -l info
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+    depends_on:
+      - webshop-app
+      - webshop-redis
+    restart: always
+    networks:
+      - webshop-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://webshop-app:8000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Nginx Service for Serving the Django Application
+  webshop-nginx:
+    image: nginx:latest
+    container_name: webshop-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:ro
+      - static:/usr/src/app/static
+      - media:/usr/src/app/media
+    depends_on:
+      - webshop-app
+    restart: always
+    networks:
+      - webshop-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+# Volumes for Persistent Data Storage
+volumes:
+  postgres_data:
+  static:  # ایجاد حجم برای static
+  media:
+
+# Custom Network
+networks:
+  webshop-network:
+    driver: bridge

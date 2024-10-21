@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
 import re
 
 
@@ -38,13 +40,13 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    phone_number = models.CharField(max_length=11, unique=True)
-    email = models.EmailField(unique=True)
-    full_name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=11, unique=True, verbose_name=_("Phone Number"))
+    email = models.EmailField(unique=True, verbose_name=_("Email"))
+    full_name = models.CharField(max_length=255, verbose_name=_("Full Name"))
 
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True, verbose_name=_("Is Active"))
+    is_staff = models.BooleanField(default=False, verbose_name=_("Is Staff"))
+    is_superuser = models.BooleanField(default=False, verbose_name=_("Is Superuser"))
 
     objects = CustomUserManager()
 
@@ -60,7 +62,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def has_module_perms(self, app_label):
         return self.is_superuser
     
-    
     class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
+
