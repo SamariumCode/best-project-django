@@ -132,10 +132,26 @@ services:
       timeout: 10s
       retries: 5
 
+  # pgAdmin Service
+  webshop-pgadmin:
+    image: dpage/pgadmin4
+    container_name: webshop-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "8080:80"
+    depends_on:
+      - webshop-db
+    restart: always
+    networks:
+      - webshop-network
+
 # Volumes for Persistent Data Storage
 volumes:
   postgres_data:
-  static:  # ایجاد حجم برای static
+  static: 
   media:
 
 # Custom Network

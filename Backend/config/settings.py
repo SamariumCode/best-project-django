@@ -23,15 +23,17 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rosetta',
     'dbbackup',
+    'django_extensions',
 
     'core.apps.CoreConfig',
     'store.apps.StoreConfig',
+    'ticket.apps.TicketConfig',
 ]
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # This comes after the custom middleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -40,6 +42,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+
 INTERNAL_IPS = ['127.0.0.1', '172.18.0.1', '0.0.0.0']
 
 ROOT_URLCONF = 'config.urls'
@@ -47,7 +51,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates', 'ticket/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -56,6 +60,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.i18n',
                 'django.contrib.messages.context_processors.messages',
+                'ticket.context_processors.get_pending_tickets',
             ],
         },
     },
@@ -85,15 +90,18 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = config('LANGUAGE_CODE', default='fa')
+TIME_ZONE = config('TIME_ZONE', default='Asia/Tehran')
 
-languages_env = config('LANGUAGES', default='fa:Persian')
+languages_env = config('LANGUAGES', default='fa:Persian,en:English')
 LANGUAGES = [(lang.split(':')[0], _(lang.split(':')[1])) for lang in languages_env.split(',')]
 
 LOCALE_PATHS = [os.path.join(BASE_DIR, 'core', 'locale')]
 
 TIME_ZONE = config('TIME_ZONE', default='UTC')
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
+
 
 # Static and media files
 STATIC_URL = config('STATIC_URL', default='/static/')
@@ -128,51 +136,12 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
 # Celery Configuration Options
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://redis:6379/0')
-CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://redis:6379/0')
+CELERY_BROKER_URL = config('CELERY_BROKER_URL', 'redis://redis:6379/0')
+CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', 'redis://redis:6379/0')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = os.getenv('TIME_ZONE', 'UTC')
-
-
-import os
-
-# مسیر به فایل لاگ
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'django_error.log'),
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'django.request': {
-            'handlers': ['file'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-    },
-}
+CELERY_TIMEZONE = config('TIME_ZONE', 'UTC')
 
 
 

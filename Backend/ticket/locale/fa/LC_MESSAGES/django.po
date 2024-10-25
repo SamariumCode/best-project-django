@@ -1,0 +1,162 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-10-24 20:24+0330\n"
+"PO-Revision-Date: 2024-10-24 20:10+0330\n"
+"Last-Translator: Anonymous User <amir@amir.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Translated-Using: django-rosetta 0.10.1\n"
+
+#: ticket/models.py:16
+msgid "Pending"
+msgstr "در حال انتظار"
+
+#: ticket/models.py:18
+msgid "Answered"
+msgstr "پاسخ داده شده"
+
+#: ticket/models.py:20
+msgid "Closed"
+msgstr "بسته شده"
+
+#: ticket/models.py:24
+msgid "Management"
+msgstr "مدیریت"
+
+#: ticket/models.py:26
+msgid "Finances"
+msgstr "مالی"
+
+#: ticket/models.py:28
+msgid "Support"
+msgstr "پشتیبانی"
+
+#: ticket/models.py:32
+msgid "Low"
+msgstr "کم"
+
+#: ticket/models.py:34
+msgid "Medium"
+msgstr "متوسط"
+
+#: ticket/models.py:36
+msgid "High"
+msgstr "زیاد"
+
+#: ticket/models.py:39 ticket/models.py:94
+msgid "User"
+msgstr "کاربر"
+
+#: ticket/models.py:40
+msgid "Title Ticket"
+msgstr "عنوان تیکت"
+
+#: ticket/models.py:46
+msgid "Status"
+msgstr "وضعیت"
+
+#: ticket/models.py:52
+msgid "Section"
+msgstr "بخش"
+
+#: ticket/models.py:58
+msgid "Priority"
+msgstr "اولویت"
+
+#: ticket/models.py:60
+msgid "Seen by user"
+msgstr "دیده شده توسط کاربر"
+
+#: ticket/models.py:61
+msgid "Seen by admin"
+msgstr "دیده شده توسط ادمین"
+
+#: ticket/models.py:63 ticket/models.py:96
+msgid "Created"
+msgstr "تاریخ ایجاد"
+
+#: ticket/models.py:64 ticket/models.py:97
+msgid "Updated"
+msgstr "تاریخ بروزرسانی"
+
+#: ticket/models.py:88 ticket/models.py:93
+msgid "Ticket"
+msgstr "تیکت"
+
+#: ticket/models.py:89
+msgid "Tickets"
+msgstr "تیکت‌ها"
+
+#: ticket/models.py:95
+msgid "Message"
+msgstr "پیام"
+
+#: ticket/models.py:103
+msgid "Ticket Message"
+msgstr "پیام تیکت"
+
+#: ticket/models.py:104
+msgid "Ticket Messages"
+msgstr "پیام‌های تیکت"
+
+#: ticket/serializers.py:48
+msgid "Ticket has been closed."
+msgstr "تیکت بسته شده است."
+
+#: ticket/serializers.py:53
+msgid "Message with similarity of 85% has already been sent."
+msgstr "پیامی با شباهت 85 درصد قبلاً ارسال شده است."
+
+#: ticket/templates/admin/app_list.html:8
+#, python-format
+msgid "Models in the %(name)s application"
+msgstr "مدل‌ها در برنامه %(name)s"
+
+#: ticket/templates/admin/app_list.html:22
+#: ticket/templates/admin/app_list.html:27
+msgid "Add"
+msgstr "اضافه کردن"
+
+#: ticket/templates/admin/app_list.html:32
+msgid "View"
+msgstr "مشاهده"
+
+#: ticket/templates/admin/app_list.html:34
+msgid "Change"
+msgstr "تغییر"
+
+#: ticket/templates/admin/app_list.html:44
+msgid "Pending Tickets"
+msgstr "تیکت‌های در حال انتظار"
+
+#: ticket/templates/admin/app_list.html:58
+msgid "You don’t have permission to view or edit anything."
+msgstr "شما اجازه مشاهده یا ویرایش هیچ چیزی را ندارید."
+
+#: ticket/views.py:29
+msgid "Ticket created successfully."
+msgstr "تیکت با موفقیت ایجاد شد."
+
+#: ticket/views.py:45
+msgid "Ticket message submitted successfully"
+msgstr "پیام تیکت با موفقیت ارسال شد."
+
+#: ticket/views.py:61
+msgid "Ticket Closed"
+msgstr "تیکت بسته شد."
+
+#: ticket/views.py:77
+msgid "Ticket seen by user"
+msgstr "تیکت توسط کاربر دیده شده."
