@@ -1,13 +1,14 @@
 from django.db import models
 
-from .models import Order
-
 class OrderManager(models.Manager):
     def paid_orders(self):
-        return self.filter(status=Order.PENDING)
+        from .models import Order
+        return self.filter(status=Order.ORDER_STATUS_PAIDED)
     
     def unpaid_orders(self):
-        return self.filter(status=Order.UNPAIDED)
+        from .models import Order
+        return self.filter(status=Order.ORDER_STATUS_UNPAIDED)
     
     def cancelled_orders(self):
-        return self.filter(status=Order.CANCELLED)
+        from .models import Order
+        return self.filter(status=Order.ORDER_STATUS_CANCELLED)

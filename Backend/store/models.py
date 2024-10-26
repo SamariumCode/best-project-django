@@ -185,6 +185,7 @@ class Addresses(models.Model):
     house_number = models.CharField(max_length=255, verbose_name=_("House Number"))
     
     class Meta:
+        # db_table = "customer_address"
         verbose_name = _('Address')
         verbose_name_plural = _('Addresses')
     
