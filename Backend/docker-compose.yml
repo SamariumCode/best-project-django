@@ -10,7 +10,7 @@ services:
     command: >
       sh -c "python manage.py migrate &&
         python manage.py collectstatic --no-input --clear &&
-        gunicorn --bind 0.0.0.0:8000 config.wsgi:application"
+        gunicorn --bind 0.0.0.0:8000 --reload config.wsgi:application"
     volumes:
       - .:/usr/src/app
       - static:/usr/src/app/static

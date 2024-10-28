@@ -24,6 +24,8 @@ INSTALLED_APPS = [
     'rosetta',
     'dbbackup',
     'django_extensions',
+    'rest_framework',
+    'django_celery_beat',
 
     'core.apps.CoreConfig',
     'store.apps.StoreConfig',

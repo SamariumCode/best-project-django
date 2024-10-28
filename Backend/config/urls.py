@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('rosetta/', include('rosetta.urls')),
     path('ticket/', include('ticket.urls')),
+    path('store/', include('store.urls')),
 ]
 
 if settings.DEBUG:  # Ensure Debug Toolbar is only added in debug mode

@@ -50,8 +50,8 @@ class Product(models.Model):
     #         raise ValidationError(_('Name must be at least 3 characters long.'))
 
     def clean(self):
-        if len(self.name) < 3:
-            raise ValidationError(_('Name must be at least 3 characters long.'))
+        if len(self.name) < 1:
+            raise ValidationError(_('Name must be at least 1 characters long.'))
 
         if self.slug and ' ' in self.slug:
             raise ValidationError(_('Slug cannot contain spaces.'))
@@ -96,7 +96,7 @@ class Customer(models.Model):
     last_name = models.CharField(max_length=255, verbose_name=_("Last Name"))
     email = models.EmailField(unique=True, verbose_name=_("Email"))
     phone_number = models.CharField(max_length=13, unique=True, verbose_name=_("Phone Number"))
-    birth_date = models.DateField(null=True, verbose_name=_("Birth Date"))
+    birth_date = models.DateField(null=True, blank=True,  verbose_name=_("Birth Date"))
 
     class Meta:
         verbose_name = _('مشتری')
