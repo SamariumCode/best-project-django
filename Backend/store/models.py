@@ -50,23 +50,40 @@ class Product(models.Model):
     #         raise ValidationError(_('Name must be at least 3 characters long.'))
 
     def clean(self):
-        if len(self.name) < 1:
-            raise ValidationError(_('Name must be at least 1 characters long.'))
+        required_fields = {
+            'name': self.name,
+            'slug': self.slug,
+            'description': self.description,
+            'price': self.price,
+            'inventory': self.inventory,
+        }
 
-        if self.slug and ' ' in self.slug:
-            raise ValidationError(_('Slug cannot contain spaces.'))
+        errors = {}
 
-        if len(self.description) < 5:
-            raise ValidationError(_('Description must be at least 5 characters long.'))
+        for field, value in required_fields.items():
+            if value in [None, '']:
+                errors[field] = _('The %(field)s field is required.') % {'field': field}
 
-        if self.price <= 0:
-            raise ValidationError(_('Price must be greater than zero.'))
-        if self.price >= 10000:
-            raise ValidationError(_('Price cannot exceed 9999.99.'))
+        if 'name' not in errors and len(self.name) < 1:
+            errors['name'] = _('Name must be at least 1 character long.')
 
-        if self.inventory < 0:
-            raise ValidationError(_('Inventory cannot be negative.'))
-    
+        if 'slug' not in errors and ' ' in self.slug:
+            errors['slug'] = _('Slug cannot contain spaces.')
+
+        if 'description' not in errors and len(self.description) < 5:
+            errors['description'] = _('Description must be at least 5 characters long.')
+
+        if 'price' not in errors and (self.price is None or self.price <= 0):
+            errors['price'] = _('Price must be greater than zero.')
+        elif 'price' not in errors and self.price >= 10000:
+            errors['price'] = _('Price cannot exceed 9999.99.')
+
+        if 'inventory' not in errors and (self.inventory is None or self.inventory < 0):
+            errors['inventory'] = _('Inventory cannot be negative.')
+
+        if errors:
+            raise ValidationError(errors)
+
     
     def save(self, *args, **kwargs):
         self.full_clean()
