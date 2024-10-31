@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
     postgresql-client \
+    cron \
+    nano \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy only the requirements file first to leverage Docker cache
@@ -28,5 +30,14 @@ COPY . .
 # Expose port 8000
 EXPOSE 8000
 
-# Set the default command to run the Django app with Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+# Add your backup script and set permissions
+COPY scripts/backup_script.sh /usr/src/app/backup_script.sh
+RUN chmod +x /usr/src/app/backup_script.sh
+
+# Set up the cron job
+COPY scripts/mycron /etc/cron.d/mycron
+RUN chmod 0644 /etc/cron.d/mycron && \
+    crontab /etc/cron.d/mycron
+
+# Start both cron and gunicorn in the same command
+CMD ["sh", "-c", "cron -f && gunicorn --bind 0.0.0.0:8000 config.wsgi:application"]

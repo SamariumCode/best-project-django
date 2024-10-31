@@ -151,3 +151,7 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda request: True,
     'INTERCEPT_REDIRECTS': False,
 }
+
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/usr/src/app/backups'}

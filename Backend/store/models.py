@@ -40,7 +40,7 @@ class Product(models.Model):
     description = models.TextField(verbose_name=_("Description"))
     price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name=_("Price"))
     inventory = models.PositiveBigIntegerField(verbose_name=_("Inventory"))
-    discounts = models.ManyToManyField(Discount, null=True, blank=True ,verbose_name=_("Discounts"), related_name='products')
+    discounts = models.ManyToManyField(Discount, blank=True ,verbose_name=_("Discounts"), related_name='products')
     datetime_created = models.DateTimeField(auto_now_add=True, verbose_name=_("Date Created"))
     datetime_modified = models.DateTimeField(auto_now=True, verbose_name=_("Date Modified"))
 
@@ -58,11 +58,20 @@ class Product(models.Model):
             'inventory': self.inventory,
         }
 
+        
+        key_errors_message = {
+            'name' : _('Name'),
+            'slug' : _('Slug'),
+            'description' : _('Description'),
+            'price' : _('Price'),
+            'inventory' : _('Inventory'),
+        }
+        
         errors = {}
 
         for field, value in required_fields.items():
             if value in [None, '']:
-                errors[field] = _('The %(field)s field is required.') % {'field': field}
+                errors[field] = _('The %(field)s field is required.') % {'field': key_errors_message[field]}
 
         if 'name' not in errors and len(self.name) < 1:
             errors['name'] = _('Name must be at least 1 character long.')
