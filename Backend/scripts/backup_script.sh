@@ -3,7 +3,7 @@
 # Define the backup file path
 BACKUP_FILE="/usr/src/app/backups/default.psql.bin"
 
-echo "Backup started at $(date)" >> /usr/src/app/backup.log
+echo "Backup started at $(date)" >> /usr/src/app/scripts/backup.log
 
 # Remove the old backup file if it exists
 if [ -f "$BACKUP_FILE" ]; then
