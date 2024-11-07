@@ -115,9 +115,22 @@ class OrderAdmin(admin.ModelAdmin):
         return order.items.count()
 
 
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ['first_name', 'last_name', 'email', 'full_name']
+    search_fields = ['first_name__icontains', 'last_name__icontains']
+    list_per_page = 20
+    ordering = ['first_name', 'last_name']
+    
+    def full_name(slef, obj):
+        return f"{obj.first_name} {obj.last_name}"
+    
+    full_name.short_description = _('Full Name')
+
+
 # Register all models
 # admin.site.register(Product)
-admin.site.register(Customer)
+# admin.site.register(Customer)
 admin.site.register(Category)
 # admin.site.register(Order)
 # admin.site.register(Comment)
