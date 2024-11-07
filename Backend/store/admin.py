@@ -1,14 +1,43 @@
+from typing import Any
 from django.contrib import admin
+from django.db.models.query import QuerySet
+from django.http import HttpRequest
 from django.utils.translation import gettext as _
 from django.utils.html import format_html
+from django.db.models import Count
 
 
 from .models import Product, Customer, Category, Order, Comment, Discount, OrderItem, Addresses, Cart, CartItem
 
 
+
+class InventoryFilter(admin.SimpleListFilter):
+    title = _("Inventory Status Filter")
+    parameter_name = 'inventory_status'
+    
+    
+    def lookups(self, request, model_admin):
+        return [
+            ('<3', _("Low")),
+            ("<3=10", _("Medium")),
+            (">10", _("High")),
+        ]
+        
+        
+    def queryset(self, request, queryset):
+        if self.value() == '<3':
+            return queryset.filter(inventory__lt=3)
+        elif self.value() == '<3=10':
+            return queryset.filter(inventory__gte=3, inventory__lte=10) # inventory__range
+        elif self.value() == '>10':
+            return queryset.filter(inventory__gt=10)
+        return queryset
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'product_category', 'description_words', 'price', 'inventory', 'inventory_status']
+    list_display = ['name', 'slug', 'product_category', 'description_words', 'price', 'inventory', 'inventory_status', 'product_category']
+    list_filter = ['datetime_created', InventoryFilter]
     list_per_page = 20
     list_editable = ('price', 'inventory')
     list_select_related = ['category']
@@ -55,6 +84,9 @@ class ProductAdmin(admin.ModelAdmin):
     inventory_status.short_description = _('Inventory Status')
 
     
+    @admin.display(ordering='category__title', description="نوع محصولات")
+    def product_category(self, product):
+        return product.category.title
     
 
 @admin.register(Comment)
@@ -68,13 +100,26 @@ class CommentAdmin(admin.ModelAdmin):
         return  comment.body[:50] + "..." if comment.body and len(comment.body) > 50 else comment.body
 
     body_words.short_description = _('Comment Body')
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['customer', 'status', 'datetime_created', 'datetime_modified', 'num_of_items']
+    list_per_page = 20
     
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('items').annotate(items_count=Count('items'))
+    
+    @admin.display(ordering='items_count', description=_("Num of items"))
+    def num_of_items(self, order):
+        return order.items.count()
+
 
 # Register all models
 # admin.site.register(Product)
 admin.site.register(Customer)
 admin.site.register(Category)
-admin.site.register(Order)
+# admin.site.register(Order)
 # admin.site.register(Comment)
 admin.site.register(Discount)
 admin.site.register(OrderItem)
