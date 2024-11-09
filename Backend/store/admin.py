@@ -4,7 +4,10 @@ from django.db.models.query import QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext as _
 from django.utils.html import format_html
-from django.db.models import Count
+from django.db.models import Count, Subquery, OuterRef
+from django.urls import reverse
+from django.utils.http import urlencode
+from django.contrib import messages
 
 
 from .models import Product, Customer, Category, Order, Comment, Discount, OrderItem, Addresses, Cart, CartItem
@@ -36,15 +39,54 @@ class InventoryFilter(admin.SimpleListFilter):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'product_category', 'description_words', 'price', 'inventory', 'inventory_status', 'product_category']
+    list_display = ['id', 'name', 'slug', 'product_category', 'description_words', 'price', 'inventory', 'inventory_status', 'product_category', 'num_of_comments', 'comment_name']
     list_filter = ['datetime_created', InventoryFilter]
-    list_per_page = 20
+    list_per_page = 10
     list_editable = ('price', 'inventory')
     list_select_related = ['category']
+    list_display_links = ['comment_name', 'id']
+    actions = ["clear_inventory"]
+    
+    @admin.display(description='# comments', ordering='comments_count')
+    def num_of_comments(self, product):
+        url = (
+            reverse('admin:store_comment_changelist')
+            + '?'
+            + urlencode({
+                'product__id': product.id,
+            })
+        )
+        return format_html('<a href="{}">{}</a>', url, product.comments_count)
+        # return product.comments_count
+    
+    @admin.display(description='comment name', ordering='comments_name')
+    def comment_name(self, product):
+        first_comment = product.comments.first()
+        if first_comment:
+            url = reverse('admin:store_comment_change', args=[first_comment.id])
+            return format_html('<a href="{}">{}</a>', url, first_comment.name)
+        return None   
+    
+    @admin.action(description=_("Clear inventory"))
+    def clear_inventory(self, request, queryset):
+        queryset.update(inventory=0)
+        self.message_user(request, _("of products inventories cleared successfully."), level=messages.SUCCESS)
+    
     
     # def short_description(self, product):
     #     description_words = product.description.split()[:5]
     #     return ' '.join(description_words) + ('...' if len(product.description.split()) > 5 else '')
+    
+    
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request).prefetch_related('comments').annotate(
+            comments_count=Count('comments'),
+            comments_name=Subquery(
+                Comment.objects.filter(product=OuterRef('pk')).order_by('datetime_created').values('name')[:1]
+            )
+        )
+        return queryset
+    
     
     @admin.display(ordering='category__title')
     def product_category(self, product):
@@ -91,9 +133,10 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['product', 'name', 'body_words', 'status', 'datetime_created', 'datetime_modified']
+    list_display = ['id', 'product', 'name', 'body_words', 'status', 'datetime_created', 'datetime_modified']
     list_editable = ['status']
     list_per_page = 10
+    list_display_links = ['name', 'id']
     # list_select_related = ['product']
     
     def body_words(self, comment):

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-07 11:54+0330\n"
-"PO-Revision-Date: 2024-11-07 11:56+0330\n"
+"POT-Creation-Date: 2024-11-09 11:15+0330\n"
+"PO-Revision-Date: 2024-11-09 11:15+0330\n"
 "Last-Translator: Anonymous User <amir@amir.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,54 +19,67 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Translated-Using: django-rosetta 0.10.1\n"
 
-#: store/admin.py:15
-#| msgid "Inventory Status"
+#: store/admin.py:17
 msgid "Inventory Status Filter"
 msgstr "فیلتر وضعیت موجودی"
 
-#: store/admin.py:21
+#: store/admin.py:23
 msgid "Low"
 msgstr "کم"
 
-#: store/admin.py:22
+#: store/admin.py:24
 msgid "Medium"
 msgstr "متوسط"
 
-#: store/admin.py:23
+#: store/admin.py:25
 msgid "High"
 msgstr "زیاد"
 
-#: store/admin.py:53
+#: store/admin.py:69
+msgid "Clear inventory"
+msgstr "موجودی را پاک کنید"
+
+#: store/admin.py:72
+msgid "of products inventories cleared successfully."
+msgstr "موجودی محصولات با موفقیت پاک شد."
+
+#: store/admin.py:94
 msgid "Product category"
 msgstr "نوع محصول"
 
-#: store/admin.py:59
+#: store/admin.py:100
 msgid "Product Description"
 msgstr "توضیحات"
 
-#: store/admin.py:68
+#: store/admin.py:109
 msgid "Low inventory"
 msgstr "موجودی کم"
 
-#: store/admin.py:71
+#: store/admin.py:112
 msgid "Medium inventory"
 msgstr "موجودی متوسط"
 
-#: store/admin.py:74
+#: store/admin.py:115
 msgid "High inventory"
 msgstr "موجودی بالا"
 
-#: store/admin.py:84
+#: store/admin.py:125
 msgid "Inventory Status"
 msgstr "وضعیت موجودی"
 
-#: store/admin.py:102
+#: store/admin.py:144
 msgid "Comment Body"
 msgstr "متن نظر"
 
-#: store/admin.py:113
+#: store/admin.py:155
 msgid "Num of items"
-msgstr "تعداد اقلام"
+msgstr "#تعداد اقلام"
+
+#: store/admin.py:170
+#, fuzzy
+#| msgid "First Name"
+msgid "Full Name"
+msgstr "نام کوچک"
 
 #: store/models.py:11
 msgid "Title"
