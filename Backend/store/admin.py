@@ -46,6 +46,10 @@ class ProductAdmin(admin.ModelAdmin):
     list_select_related = ['category']
     list_display_links = ['comment_name', 'id']
     actions = ["clear_inventory"]
+    autocomplete_fields = ["category"]
+    prepopulated_fields = {
+        'slug': ['name']
+    }
     
     @admin.display(description='# comments', ordering='comments_count')
     def num_of_comments(self, product):
@@ -171,10 +175,18 @@ class CustomerAdmin(admin.ModelAdmin):
     full_name.short_description = _('Full Name')
 
 
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ["title", "description"]
+    search_fields = ['title']
+    
+    list_per_page = 10
+
+
 # Register all models
 # admin.site.register(Product)
 # admin.site.register(Customer)
-admin.site.register(Category)
+# admin.site.register(Category)
 # admin.site.register(Order)
 # admin.site.register(Comment)
 admin.site.register(Discount)
