@@ -149,10 +149,17 @@ class CommentAdmin(admin.ModelAdmin):
     body_words.short_description = _('Comment Body')
 
 
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    fields = ["product", "quantity", "price"]    
+
+
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['customer', 'status', 'datetime_created', 'datetime_modified', 'num_of_items']
     list_per_page = 20
+    inlines = [OrderItemInline]
     
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('items').annotate(items_count=Count('items'))
@@ -175,13 +182,37 @@ class CustomerAdmin(admin.ModelAdmin):
     full_name.short_description = _('Full Name')
 
 
+
+class ProductAdminInline(admin.TabularInline):
+    model = Product
+    fields = ["name", "slug", "price"]
+    extra = 0
+    min_num = 1
+    max_num = 10
+
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ["title", "description"]
+    list_display = ["title", "description", "product_count"]
     search_fields = ['title']
     
-    list_per_page = 10
-
+    list_per_page = 20
+    inlines = [ProductAdminInline]
+    
+    @admin.display(description=_("Product Count"), ordering="nums")
+    def product_count(self, category):
+        return category.nums
+    
+    
+    def get_queryset(self, request):
+        # Use prefetch_related for fetching the related products
+        queryset = super().get_queryset(request).prefetch_related("products")
+        
+        # Annotate with the count of related products
+        queryset = queryset.annotate(nums=Count("products"))
+        
+        return queryset
+    
 
 # Register all models
 # admin.site.register(Product)

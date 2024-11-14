@@ -2,6 +2,7 @@ from django.db import models
 from django.forms import ValidationError
 from django.utils.translation import gettext as _
 from django.utils.text import slugify
+from django.core.validators import MinValueValidator
 
 from .managers import OrderManager
 
@@ -33,69 +34,43 @@ class Discount(models.Model):
         verbose_name_plural = _("Discounts")
 
 
+
 class Product(models.Model):
     name = models.CharField(max_length=255, verbose_name=_("Name"))
     slug = models.SlugField(unique=True, db_index=True, blank=True, null=True, verbose_name=_("Slug"))
-    category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL, verbose_name=_("Category"), related_name='products')
+    category = models.ForeignKey('Category', null=True, on_delete=models.SET_NULL, verbose_name=_("Category"), related_name='products')
     description = models.TextField(verbose_name=_("Description"))
-    price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name=_("Price"))
+    price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name=_("Price"), validators=[MinValueValidator(1)])
     inventory = models.PositiveBigIntegerField(verbose_name=_("Inventory"))
-    discounts = models.ManyToManyField(Discount, blank=True ,verbose_name=_("Discounts"), related_name='products')
+    discounts = models.ManyToManyField('Discount', blank=True ,verbose_name=_("Discounts"), related_name='products')
     datetime_created = models.DateTimeField(auto_now_add=True, verbose_name=_("Date Created"))
     datetime_modified = models.DateTimeField(auto_now=True, verbose_name=_("Date Modified"))
 
-    
-    # def clean_name(self):
-    #     if len(self.name) < 3:
-    #         raise ValidationError(_('Name must be at least 3 characters long.'))
-
     def clean(self):
-        required_fields = {
-            'name': self.name,
-            'slug': self.slug,
-            'description': self.description,
-            'price': self.price,
-            'inventory': self.inventory,
-        }
-
-        
-        key_errors_message = {
-            'name' : _('Name'),
-            'slug' : _('Slug'),
-            'description' : _('Description'),
-            'price' : _('Price'),
-            'inventory' : _('Inventory'),
-        }
-        
         errors = {}
 
-        for field, value in required_fields.items():
-            if value in [None, '']:
-                errors[field] = _('The %(field)s field is required.') % {'field': key_errors_message[field]}
-
-        if 'name' not in errors and len(self.name) < 1:
+        if len(self.name) < 1:
             errors['name'] = _('Name must be at least 1 character long.')
 
-        if 'slug' not in errors and ' ' in self.slug:
+        if self.slug and ' ' in self.slug:
             errors['slug'] = _('Slug cannot contain spaces.')
 
-        if 'description' not in errors and len(self.description) < 5:
+        if len(self.description) < 5:
             errors['description'] = _('Description must be at least 5 characters long.')
 
-        if 'price' not in errors and (self.price is None or self.price <= 0):
+        if self.price is None or self.price <= 0:
             errors['price'] = _('Price must be greater than zero.')
-        elif 'price' not in errors and self.price >= 10000:
+        elif self.price >= 10000:
             errors['price'] = _('Price cannot exceed 9999.99.')
 
-        if 'inventory' not in errors and (self.inventory is None or self.inventory < 0):
+        if self.inventory is None or self.inventory < 0:
             errors['inventory'] = _('Inventory cannot be negative.')
 
         if errors:
             raise ValidationError(errors)
-
     
     def save(self, *args, **kwargs):
-        self.full_clean()
+        self.full_clean()    
         if not self.slug:
             base_slug = slugify(self.name)
             slug = base_slug
@@ -173,6 +148,10 @@ class OrderItem(models.Model):
     class Meta:
         verbose_name = _('Order Item')
         verbose_name_plural = _('Order Items')
+        
+        
+    def __str__(self):
+        return self.order.customer.first_name
 
 
 class Comment(models.Model):

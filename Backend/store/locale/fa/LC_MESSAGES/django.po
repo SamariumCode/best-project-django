@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-09 11:15+0330\n"
-"PO-Revision-Date: 2024-11-09 11:15+0330\n"
+"POT-Creation-Date: 2024-11-09 13:00+0330\n"
+"PO-Revision-Date: 2024-11-09 13:00+0330\n"
 "Last-Translator: Anonymous User <amir@amir.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,67 +19,72 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Translated-Using: django-rosetta 0.10.1\n"
 
-#: store/admin.py:17
+#: store/admin.py:18
 msgid "Inventory Status Filter"
 msgstr "فیلتر وضعیت موجودی"
 
-#: store/admin.py:23
+#: store/admin.py:24
 msgid "Low"
 msgstr "کم"
 
-#: store/admin.py:24
+#: store/admin.py:25
 msgid "Medium"
 msgstr "متوسط"
 
-#: store/admin.py:25
+#: store/admin.py:26
 msgid "High"
 msgstr "زیاد"
 
-#: store/admin.py:69
+#: store/admin.py:74
 msgid "Clear inventory"
 msgstr "موجودی را پاک کنید"
 
-#: store/admin.py:72
+#: store/admin.py:77
 msgid "of products inventories cleared successfully."
 msgstr "موجودی محصولات با موفقیت پاک شد."
 
-#: store/admin.py:94
+#: store/admin.py:99
 msgid "Product category"
 msgstr "نوع محصول"
 
-#: store/admin.py:100
+#: store/admin.py:105
 msgid "Product Description"
 msgstr "توضیحات"
 
-#: store/admin.py:109
+#: store/admin.py:114
 msgid "Low inventory"
 msgstr "موجودی کم"
 
-#: store/admin.py:112
+#: store/admin.py:117
 msgid "Medium inventory"
 msgstr "موجودی متوسط"
 
-#: store/admin.py:115
+#: store/admin.py:120
 msgid "High inventory"
 msgstr "موجودی بالا"
 
-#: store/admin.py:125
+#: store/admin.py:130
 msgid "Inventory Status"
 msgstr "وضعیت موجودی"
 
-#: store/admin.py:144
+#: store/admin.py:149
 msgid "Comment Body"
 msgstr "متن نظر"
 
-#: store/admin.py:155
+#: store/admin.py:167
 msgid "Num of items"
 msgstr "#تعداد اقلام"
 
-#: store/admin.py:170
+#: store/admin.py:182
 #, fuzzy
 #| msgid "First Name"
 msgid "Full Name"
 msgstr "نام کوچک"
+
+#: store/admin.py:200
+#| msgid "Product"
+msgid "Product Count"
+msgstr "تعداد محصول"
 
 #: store/models.py:11
 msgid "Title"
@@ -109,7 +114,7 @@ msgstr "تخفیف"
 msgid "Discounts"
 msgstr "تخفیف‌ها"
 
-#: store/models.py:37 store/models.py:63 store/models.py:191
+#: store/models.py:37 store/models.py:63 store/models.py:195
 msgid "Name"
 msgstr "نام"
 
@@ -125,11 +130,11 @@ msgstr "قیمت"
 msgid "Inventory"
 msgstr "موجودی"
 
-#: store/models.py:44 store/models.py:147 store/models.py:193
+#: store/models.py:44 store/models.py:147 store/models.py:197
 msgid "Date Created"
 msgstr "تاریخ ایجاد"
 
-#: store/models.py:45 store/models.py:148 store/models.py:194
+#: store/models.py:45 store/models.py:148 store/models.py:198
 msgid "Date Modified"
 msgstr "تاریخ ویرایش"
 
@@ -202,7 +207,7 @@ msgstr "پرداخت نشده"
 msgid "Cancelled"
 msgstr "لغو شده"
 
-#: store/models.py:146 store/models.py:207
+#: store/models.py:146 store/models.py:211
 msgid "Customer"
 msgstr "مشتری"
 
@@ -218,11 +223,11 @@ msgstr "سفارش"
 msgid "Orders"
 msgstr "سفارش‌ها"
 
-#: store/models.py:169 store/models.py:190 store/models.py:231
+#: store/models.py:169 store/models.py:194 store/models.py:235
 msgid "Product"
 msgstr "محصول"
 
-#: store/models.py:170 store/models.py:232
+#: store/models.py:170 store/models.py:236
 msgid "Quantity"
 msgstr "تعداد"
 
@@ -234,75 +239,75 @@ msgstr "آیتم سفارش"
 msgid "Order Items"
 msgstr "آیتم‌های سفارش"
 
-#: store/models.py:185
+#: store/models.py:189
 msgid "Waiting"
 msgstr "در انتظار تایید"
 
-#: store/models.py:186
+#: store/models.py:190
 msgid "Approved"
 msgstr "تایید شده"
 
-#: store/models.py:187
+#: store/models.py:191
 msgid "Not Approved"
 msgstr "تایید نشده"
 
-#: store/models.py:192
+#: store/models.py:196
 msgid "Body"
 msgstr "متن"
 
-#: store/models.py:195
+#: store/models.py:199
 msgid "Comment Status"
 msgstr "وضعیت نظر"
 
-#: store/models.py:198
+#: store/models.py:202
 msgid "Comment"
 msgstr "نظر"
 
-#: store/models.py:199
+#: store/models.py:203
 msgid "Comments"
 msgstr "نظرات"
 
-#: store/models.py:208
+#: store/models.py:212
 msgid "Province"
 msgstr "استان"
 
-#: store/models.py:209
+#: store/models.py:213
 msgid "City"
 msgstr "شهر"
 
-#: store/models.py:210
+#: store/models.py:214
 msgid "Street"
 msgstr "خیابان"
 
-#: store/models.py:211
+#: store/models.py:215
 msgid "House Number"
 msgstr "شماره خانه"
 
-#: store/models.py:215
+#: store/models.py:219
 msgid "Address"
 msgstr "آدرس"
 
-#: store/models.py:216
+#: store/models.py:220
 msgid "Addresses"
 msgstr "آدرس‌ها"
 
-#: store/models.py:222
+#: store/models.py:226
 msgid "Created_at"
 msgstr "تاریخ ایجاد"
 
-#: store/models.py:225 store/models.py:230
+#: store/models.py:229 store/models.py:234
 msgid "Cart"
 msgstr "سبد خرید"
 
-#: store/models.py:226
+#: store/models.py:230
 msgid "Carts"
 msgstr "سبدهای خرید"
 
-#: store/models.py:235
+#: store/models.py:239
 msgid "Cart Item"
 msgstr "آیتم سبد خرید"
 
-#: store/models.py:236
+#: store/models.py:240
 msgid "Cart Items"
 msgstr "آیتم‌های سبد خرید"
 
