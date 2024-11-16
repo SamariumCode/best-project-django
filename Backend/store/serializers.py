@@ -1,10 +1,16 @@
 from decimal import Decimal, ROUND_DOWN
 from rest_framework import serializers
 
-from .models import Product
+from .models import Product, Category
 
 
 DOLLORS_TO_RIALS = 68000
+
+
+
+class CategorySerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=255)
+    description = serializers.CharField(max_length=255)
 
 
 class ProductSerializer(serializers.Serializer):
@@ -15,7 +21,8 @@ class ProductSerializer(serializers.Serializer):
     # category = serializers.PrimaryKeyRelatedField(
     #     queryset=Product.objects.all()
     # )
-    category = serializers.StringRelatedField()
+    # category = serializers.StringRelatedField()
+    category = CategorySerializer()
     price_after_tax = serializers.SerializerMethodField()
     inventory = serializers.IntegerField()
     price_rials = serializers.SerializerMethodField()
