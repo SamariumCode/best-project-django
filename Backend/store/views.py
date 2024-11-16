@@ -14,11 +14,14 @@ def products_list(request):
         queryset = Product.objects.all().select_related('category')
         ser_data = ProductSerializer(queryset, many=True, context={"request": request})
         return Response(ser_data.data)
+    
     elif request.method == "POST":
         ser_data = ProductSerializer(data=request.data)
-        ser_data.is_valid(raise_exception=True)
-        ser_data.save()
-        return Response("Everything is good!")
+        
+        if ser_data.is_valid():
+            product = ser_data.save()
+            return Response(ProductSerializer(product).data, status=status.HTTP_201_CREATED)
+        return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view()
 def product_detail(request, pk):

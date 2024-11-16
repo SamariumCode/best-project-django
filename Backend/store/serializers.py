@@ -2,55 +2,49 @@ from decimal import Decimal, ROUND_DOWN
 from django.utils.text import slugify
 from rest_framework import serializers
 
-from .models import Product, Category
+from .models import Product, Category, Discount
 
 
 DOLLORS_TO_RIALS = 68000
 
-
 class CategorySerializer(serializers.ModelSerializer):
-    # title = serializers.CharField(max_length=255)
-    # description = serializers.CharField(max_length=255)    
     class Meta:
         model = Category
-        fields = ["id", "title", "description"]
+        fields = ['id', 'title', 'description']
+
+    # def create(self, validated_data):
+    #     category = Category.objects.create(**validated_data)
+    #     return category
+    
+    
+
+class DiscountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Discount
+        fields = ['id', 'discount', 'description']
 
 class ProductSerializer(serializers.ModelSerializer):
-    
-    # unit_price = serializers.FloatField(source="price")
-    # category = serializers.HyperlinkedRelatedField(
-    #     queryset=Category.objects.all(),
-    #     view_name="category_detail",
-    # )
-    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
-    price_after_tax = serializers.SerializerMethodField()
-    
+    category = CategorySerializer()
+    discounts = DiscountSerializer(many=True, required=False)
+
     class Meta:
         model = Product
-        fields = ["id", "name", "slug", "category", "price", "inventory", "price_after_tax", "description"]
-        
-    def get_price_after_tax(self, product:Product):
-        tax_rate = Decimal('0.35')
-        price_with_tax = (product.price + (product.price * tax_rate)).quantize(Decimal('0.01'), rounding=ROUND_DOWN)
-        return price_with_tax
-    
-    
+        fields = ['id', 'name', 'slug', 'category', 'description', 'price', 'inventory', 'discounts']
+
     def create(self, validated_data):
-        product = Product(**validated_data)
-        product.slug = slugify(product.name)
-        product.save()
-        return product
-    
-    
-    def validate(self, data):
-        if len(data["name"]) < 6:
-            raise serializers.ValidationError({"error": "Product name should be at less 6"})
-        return data
+        category_data = validated_data.pop('category', None)
+        if category_data:
+            category, created = Category.objects.get_or_create(**category_data)
         
-    
-    def to_representation(self, instance):
-        representation =  super().to_representation(instance)
-        representation['price'] = float(representation["price"])
-        representation['inventory'] = int(representation["inventory"])
-        return representation
-    
+        discounts_data = validated_data.pop('discounts', [])
+        discounts = []
+        for discount_data in discounts_data:
+            discount, created = Discount.objects.get_or_create(**discount_data)
+            discounts.append(discount)
+
+        product = Product.objects.create(category=category, **validated_data)
+        
+        if discounts:
+            product.discounts.set(discounts)
+
+        return product

@@ -38,7 +38,7 @@ class Discount(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255, verbose_name=_("Name"))
     slug = models.SlugField(unique=True, db_index=True, blank=True, null=True, verbose_name=_("Slug"))
-    category = models.ForeignKey('Category', null=True, on_delete=models.SET_NULL, verbose_name=_("Category"), related_name='products')
+    category = models.ForeignKey('Category', blank=False ,null=True, on_delete=models.SET_NULL, verbose_name=_("Category"), related_name='products')
     description = models.TextField(verbose_name=_("Description"))
     price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name=_("Price"), validators=[MinValueValidator(1)])
     inventory = models.PositiveBigIntegerField(verbose_name=_("Inventory"))
