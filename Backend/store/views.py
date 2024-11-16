@@ -8,23 +8,23 @@ from .models import Product, Category
 from .serializers import ProductSerializer, CategorySerializer
 
 
-@api_view()
-def products_list(request):
-    queryset = Product.objects.all().select_related('category')
-    ser_data = ProductSerializer(queryset, many=True, context={"request": request})
-    return Response(ser_data.data)
-    
 @api_view(["GET", "POST"])
-def product_detail(request, pk):
+def products_list(request):
     if request.method == "GET":
-        product = get_object_or_404(Product.objects.select_related("category"), id=pk)
-        ser_data = ProductSerializer(product, context={"request": request})
+        queryset = Product.objects.all().select_related('category')
+        ser_data = ProductSerializer(queryset, many=True, context={"request": request})
         return Response(ser_data.data)
     elif request.method == "POST":
         ser_data = ProductSerializer(data=request.data)
         ser_data.is_valid(raise_exception=True)
         ser_data.save()
         return Response("Everything is good!")
+    
+@api_view()
+def product_detail(request, pk):
+    product = get_object_or_404(Product.objects.select_related("category"), id=pk)
+    ser_data = ProductSerializer(product, context={"request": request})
+    return Response(ser_data.data)
         
 
 

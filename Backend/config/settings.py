@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'django_celery_beat',
+    "drf_spectacular",
 
     'core.apps.CoreConfig',
     'store.apps.StoreConfig',
@@ -176,4 +177,13 @@ AWS_S3_FILE_OVERWRITE = False
 
 REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your API Title',
+    'DESCRIPTION': 'Your API description goes here',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
