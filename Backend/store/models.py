@@ -214,3 +214,11 @@ class CartItem(models.Model):
         verbose_name = _('Cart Item')
         verbose_name_plural = _('Cart Items')
         unique_together = [['cart', 'product']]
+        
+        
+class Document(models.Model):
+    title = models.CharField(max_length=100)
+    file = models.FileField(upload_to='uploads/')
+
+    def __str__(self):
+        return self.title

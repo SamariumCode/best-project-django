@@ -155,3 +155,20 @@ DEBUG_TOOLBAR_CONFIG = {
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': '/usr/src/app/backups'}
+
+
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3.S3Storage"
+
+
+AWS_ACCESS_KEY_ID = '6205efee-88d1-4d21-8499-cae334c8198d'
+
+AWS_SECRET_ACCESS_KEY = 'b2dfacbb244e11e66f719225b30c5e08d38430602046aca59d348eea38440c24'
+
+AWS_S3_ENDPOINT_URL = 'https://djangorestframework-shoponline.s3.ir-thr-at1.arvanstorage.ir'
+
+AWS_STORAGE_BUCKET_NAME = 'djangorestframework-shoponline'
+
+AWS_SERVICE_NAME = 's3'
+
+AWS_S3_FILE_OVERWRITE = False
