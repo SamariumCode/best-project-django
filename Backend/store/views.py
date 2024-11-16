@@ -10,14 +10,14 @@ from .serializers import ProductSerializer
 
 @api_view()
 def products_list(request):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().select_related('category')
     ser_data = ProductSerializer(queryset, many=True)
     return Response(ser_data.data)
     
 @api_view()
 def product_detail(request, id):
     
-    product = get_object_or_404(Product, id=id)
+    product = get_object_or_404(Product.objects.select_related("category"), id=id)
     ser_data = ProductSerializer(product)
     return Response(ser_data.data)
     
