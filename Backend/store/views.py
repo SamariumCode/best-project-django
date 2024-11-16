@@ -1,27 +1,19 @@
-from django.shortcuts import get_object_or_404
 from django.http import Http404
-
+from django.shortcuts import get_object_or_404
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
 
 from .models import Product
 from .serializers import ProductSerializer
 
+
 @api_view()
 def products_list(request):
     queryset = Product.objects.all()
-    results = []
-    for item in queryset:
-        result = {
-            "name": item.name,
-            "slug": item.slug,
-            "category": item.category.title,
-            "price": item.price
-        }
-        results.append(result)
-    return Response(results)
-
+    ser_data = ProductSerializer(queryset, many=True)
+    return Response(ser_data.data)
+    
 @api_view()
 def product_detail(request, id):
     
