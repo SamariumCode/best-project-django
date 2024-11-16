@@ -172,3 +172,8 @@ AWS_STORAGE_BUCKET_NAME = 'djangorestframework-shoponline'
 AWS_SERVICE_NAME = 's3'
 
 AWS_S3_FILE_OVERWRITE = False
+
+
+REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING': False,
+}
