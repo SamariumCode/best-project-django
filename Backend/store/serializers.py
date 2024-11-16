@@ -1,4 +1,5 @@
 from decimal import Decimal, ROUND_DOWN
+from django.utils.text import slugify
 from rest_framework import serializers
 
 from .models import Product, Category
@@ -34,6 +35,13 @@ class ProductSerializer(serializers.ModelSerializer):
         return price_with_tax
     
     
+    def create(self, validated_data):
+        product = Product(**validated_data)
+        product.slug = slugify(product.name)
+        product.save()
+        return product
+    
+    
     def validate(self, data):
         if len(data["name"]) < 6:
             raise serializers.ValidationError({"error": "Product name should be at less 6"})
@@ -42,7 +50,7 @@ class ProductSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         representation =  super().to_representation(instance)
-        representation['unit_price'] = float(representation["unit_price"])
+        representation['price'] = float(representation["price"])
         representation['inventory'] = int(representation["inventory"])
         return representation
     
