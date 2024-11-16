@@ -22,6 +22,12 @@ def product_detail(request, id):
 
 
 @api_view()
+def category_list(request):
+    queryset = Category.objects.all().prefetch_related('products')
+    ser_data = CategorySerializer(queryset, many=True, context={"request":request})
+    return Response(ser_data.data)
+
+@api_view()
 def category_detail(request, pk):
     category = get_object_or_404(Category, id=pk)
     ser_data = CategorySerializer(category, context={"request":request})
